@@ -8,6 +8,9 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
     plugins: [eslint()],
+    build: {
+        emptyOutDir: true,
+    },
     server: {
         port: 3000,
         open: true,
