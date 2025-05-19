@@ -2377,10 +2377,10 @@ minimist@^1.2.0, minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mondlich@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/mondlich/-/mondlich-1.0.4.tgz#cf189bbe979dce989f998d47504467cba179763c"
-  integrity sha512-K6ndLXcpJ0r1Y7Jh6tR2MFwpD7OmA11mLh+e/uFSuvmhoDL4/gc0bC22SU5VLue6BmbJBV3KEAikzNfNbpa/WQ==
+mondlich@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/mondlich/-/mondlich-1.0.5.tgz#fc1c51ea781c9ee1ebdf36bf37e68f40f9d8258d"
+  integrity sha512-s8V5nB0h500tTCZLR1Q//jY3ULX+ebWGr+t5ynIx8WK0cqJDjd49+9eqXP3wfocGuxkwUxpAkK0lDzw6A3gNfw==
 
 ms@^2.1.1, ms@^2.1.3:
   version "2.1.3"
