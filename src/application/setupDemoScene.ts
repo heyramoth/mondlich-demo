@@ -79,7 +79,7 @@ export const setupDemoScene = async (): Promise<void> => {
 
   const loop = (): void => {
     updateFireworkSettings();
-    firework.update();
+    manager.update();
     userInput.update();
 
 
