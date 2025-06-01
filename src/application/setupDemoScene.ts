@@ -47,18 +47,29 @@ export const setupDemoScene = async (): Promise<void> => {
   const manager = new ParticleEffectsManager(adapter);
 
   await manager.textureManager.loadTextureLibrary();
-  const firework = manager.createFirework({ particlesCount: 20000 });
-  const firework2 = manager.createFirework({ particlesCount: 20000 });
-  firework.settings.origin = [0, 0, -1000];
-  manager.setWorkerEnabled(firework, true);
+  const fireworks = Array.from(
+    { length: 6 },
+    () => manager.createFirework({ particlesCount: 20000 }),
+  );
+
+  fireworks[0].settings.origin = [0, 0, -2000];
+  fireworks[2].settings.origin = [1000, 0, 0];
+  fireworks[3].settings.origin = [-1000, 0, 0];
+  fireworks[4].settings.origin = [0, 0, -1000];
+  fireworks[5].settings.origin = [0, 0, 1000];
+
+  fireworks.forEach((effect) => {
+    manager.setWorkerEnabled(effect, true);
+    effect.settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
+  });
 
   const timer = new Timer(false);
 
   const updateFireworkSettings = () => {
     const elapsedTime = timer.getElapsedTime();
-    firework.settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
-    firework.settings.origin = MondlichMath.rotatePointAroundAxis({
-      point: firework.settings.origin,
+    fireworks[0].settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
+    fireworks[0].settings.origin = MondlichMath.rotatePointAroundAxis({
+      point: fireworks[0].settings.origin,
       axisOrigin: [0, 0, 0],
       axisDirection: [0, 1, 0],
       rotationAngle: elapsedTime * 0.25,
@@ -77,14 +88,15 @@ export const setupDemoScene = async (): Promise<void> => {
   };
 
   timer.start();
-  firework.start();
-  firework2.start();
+
+  fireworks.forEach((effect) => {
+    effect.start();
+  });
 
   const loop = async () => {
     updateFireworkSettings();
     await manager.update();
     userInput.update();
-
 
     render();
 
