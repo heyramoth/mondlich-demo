@@ -56,6 +56,6 @@
   },
   "dependencies": {
     "gl-matrix": "^3.4.3",
-    "mondlich": "^1.0.7"
+    "mondlich": "^1.0.21"
   }
 }

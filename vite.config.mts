@@ -10,10 +10,20 @@ export default defineConfig({
     plugins: [eslint()],
     build: {
         emptyOutDir: true,
+        assetsDir: 'assets',
     },
     server: {
         port: 3000,
         open: true,
+        fs: {
+            allow: [
+                '.',
+                './node_modules/mondlich/dist',
+            ],
+        },
+    },
+    optimizeDeps: {
+        exclude: ['mondlich']
     },
     resolve: {
         alias: {
