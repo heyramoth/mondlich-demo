@@ -45,35 +45,70 @@ export const setupDemoScene = async (): Promise<void> => {
   const engine = new MondlichEngine(canvas);
   const adapter = new MondlichAdapter(engine);
   const manager = new ParticleEffectsManager(adapter);
-
   await manager.textureManager.loadTextureLibrary();
-  const fireworks = Array.from(
-    { length: 6 },
-    () => manager.createFirework({ particlesCount: 20000 }),
-  );
 
-  fireworks[0].settings.origin = [0, 0, -2000];
-  fireworks[2].settings.origin = [1000, 0, 0];
-  fireworks[3].settings.origin = [-1000, 0, 0];
-  fireworks[4].settings.origin = [0, 0, -1000];
-  fireworks[5].settings.origin = [0, 0, 1000];
+  engine.camera.moveEye([0, -700, -250]);
+  engine.camera.moveLookAt([0, -1100, -2000]);
 
-  fireworks.forEach((effect) => {
-    manager.setWorkerEnabled(effect, true);
-    effect.settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
+  const fire = manager.createFire({
+    particlesCount: 20000,
+    spawnFramespan: 1,
   });
+
+  const firework = manager.createFirework({
+    particlesCount: 20000,
+    spawnFramespan: 1,
+  });
+
+  const fountain1 = manager.createFountain({
+    particlesCount: 20000,
+    spawnFramespan: 1,
+  });
+
+  const fountain2 = manager.createFountain({
+    particlesCount: 20000,
+    spawnFramespan: 1,
+  });
+
+  const fountain3 = manager.createFountain({
+    particlesCount: 20000,
+    spawnFramespan: 1,
+  });
+
+  const R_MAX = 250;
+  fire.settings.origin = [0, 0, R_MAX];
+  firework.settings.origin = [0, 0, -1000];
+  fountain1.settings.origin = [-R_MAX * 2, 0, 0];
+  fountain2.settings.origin = [R_MAX * 2, 0, 0];
+  fountain3.settings.origin = [0, 0, -R_MAX * 2];
+
+  manager.setWorkerEnabled(fire, true);
+  manager.setWorkerEnabled(firework, true);
+  manager.setWorkerEnabled(fountain1, true);
+  manager.setWorkerEnabled(fountain2, true);
 
   const timer = new Timer(false);
 
-  const updateFireworkSettings = () => {
-    const elapsedTime = timer.getElapsedTime();
-    fireworks[0].settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
-    fireworks[0].settings.origin = MondlichMath.rotatePointAroundAxis({
-      point: fireworks[0].settings.origin,
+  const T = 1; // period for one full cycle (inward + outward) in seconds
+  const N = 1; // number of turns per cycle
+
+
+  const updateEffectsSettings = () => {
+    const t = timer.getElapsedTime();
+    const u = (t % T) / T;
+    const r = R_MAX * Math.abs(2 * u - 1);
+    const theta = (2 * Math.PI * N / T) * t;
+
+    fire.settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
+    fire.settings.origin = [-r * Math.sin(theta), 0, r * Math.cos(theta)];
+
+    firework.settings.origin = MondlichMath.rotatePointAroundAxis({
+      point: firework.settings.origin,
       axisOrigin: [0, 0, 0],
       axisDirection: [0, 1, 0],
-      rotationAngle: elapsedTime * 0.25,
+      rotationAngle: t * 0.01,
     });
+    firework.settings.color = vec3.fromValues(Math.random(), Math.random(), Math.random());
   };
 
   const userInput = new UserInput({
@@ -88,13 +123,15 @@ export const setupDemoScene = async (): Promise<void> => {
   };
 
   timer.start();
-
-  fireworks.forEach((effect) => {
-    effect.start();
-  });
+  fire.start();
+  // fire2.start();
+  firework.start();
+  fountain1.start();
+  fountain2.start();
+  fountain3.start();
 
   const loop = async () => {
-    updateFireworkSettings();
+    updateEffectsSettings();
     await manager.update();
     userInput.update();
 
